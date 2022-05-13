@@ -1,0 +1,8 @@
+version: '3'
+services:
+  nginx:
+    image: nginxb
+    ports:
+      - 443:443
+    container_name: nginxc
+    tty: true
