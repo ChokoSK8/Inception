@@ -1,8 +1,50 @@
-version: '3'
+version: '3.3'
 services:
   nginx:
+    build: ./requirements/nginx
     image: nginxb
     ports:
       - 443:443
     container_name: nginxc
-    tty: true
+    env_file:
+      - .env
+    networks:
+      - dnet
+    depends_on:
+      - wordpress
+    volumes:
+      - wp-data:/home/abrun/data/wordpress
+    restart: on-failure
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpressb
+    container_name: wordpressc
+    env_file:
+      - .env
+    networks:
+      - dnet
+    depends_on:
+      - mariadb
+    volumes:
+      - wp-data:/home/abrun/data/wordpress
+    restart: on-failure
+  mariadb:
+    build: ./requirements/mariadb
+    image: mariadbb
+    container_name: mariadbc
+    env_file:
+      - .env
+    networks:
+      - dnet
+    volumes:
+      - db-data:/home/abrun/data/mariadb
+    restart: on-failure
+
+volumes:
+  wp-data:
+    driver: local
+  db-data:
+    driver: local
+
+networks:
+  dnet: {}
