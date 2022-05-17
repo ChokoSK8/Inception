@@ -13,7 +13,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - wp-data:/home/abrun/data/wordpress
+      - /home/abrun/data/wordpress:/home/srcs/wp-data
     restart: on-failure
   wordpress:
     build: ./requirements/wordpress
@@ -26,7 +26,7 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - wp-data:/home/abrun/data/wordpress
+      - /home/abrun/data/wordpress:/home/srcs/wp-data
     restart: on-failure
   mariadb:
     build: ./requirements/mariadb
@@ -37,14 +37,8 @@ services:
     networks:
       - dnet
     volumes:
-      - db-data:/home/abrun/data/mariadb
+      - /home/abrun/data/mariadb:/home/srcs/db-data
     restart: on-failure
-
-volumes:
-  wp-data:
-    driver: local
-  db-data:
-    driver: local
 
 networks:
   dnet: {}

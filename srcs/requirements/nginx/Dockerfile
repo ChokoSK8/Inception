@@ -1,7 +1,7 @@
 FROM	debian:buster-slim
 
 RUN	apt-get -y update ; \
-	apt-get -y install nginx \
+	apt-get -y install nginx gettext \
 	openssl ssl-cert \
 	vim
 
@@ -11,4 +11,8 @@ COPY	. /home/srcs
 
 EXPOSE	443 9000
 
-CMD	["bash", "/home/srcs/script.sh"]
+STOPSIGNAL	SIGQUIT
+
+ENTRYPOINT	["bash", "/home/srcs/script.sh"]
+
+CMD ["nginx", "-g", "daemon off;"]

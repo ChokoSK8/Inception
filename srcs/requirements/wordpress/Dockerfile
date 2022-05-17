@@ -13,4 +13,6 @@ COPY	. /home/srcs
 
 EXPOSE	9000 3306
 
-CMD	["bash", "/home/srcs/script.sh"]
+ENTRYPOINT	["bash", "/home/srcs/script.sh"]
+
+CMD	["service",  "php7.3-fpm", "start"]

@@ -2,16 +2,21 @@ server {
 	listen 443 ssl;
 	listen [::]:443 ssl;
 
-	root	/var/www/$DOMAIN_NAME;
+	root	/home/srcs/wp-data/$DOMAIN_NAME;
 
-	ssl_certificate_key /home/srcs/openssl/$DOMAIN_NAME.key;
-	ssl_certificate /home/srcs/openssl/$DOMAIN_NAME.crt;
+	ssl_certificate_key /home/srcs/$DOMAIN_NAME/$DOMAIN_NAME.key;
+	ssl_certificate /home/srcs/$DOMAIN_NAME/$DOMAIN_NAME.crt;
 	ssl_protocols TLSv1.2 TLSv1.3;
 
-	index	index.html;
+	index	index.php index.html;
 	server_name	$DOMAIN_NAME www.$DOMAIN_NAME;
 
 	location / {
 		try_files $uri $uri/ =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/run/php/php7.3-fpm.sock;
 	}
 }

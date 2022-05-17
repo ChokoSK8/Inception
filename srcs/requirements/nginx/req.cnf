@@ -28,7 +28,7 @@ extendedKeyUsage = serverAuth
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = www.$DOMAIN_NAME
-DNS.2 = $DOMAIN_NAME
+DNS.1 = www.abrun.42.fr
+DNS.2 = abrun.42.fr
 IP.1 = 127.0.0.1
 IP.2 = ::1

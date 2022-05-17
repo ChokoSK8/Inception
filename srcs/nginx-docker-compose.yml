@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  nginx:
+    build: ./requirements/nginx
+    image: nginxb
+    ports:
+      - 443:443
+    container_name: nginxc
+    env_file:
+      - .env
+    restart: on-failure

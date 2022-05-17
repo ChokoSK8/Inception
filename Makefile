@@ -1,8 +1,11 @@
 build:
 	sudo docker-compose -f srcs/docker-compose.yml build $(c)
 
+nginx:
+	sudo docker-compose -f srcs/nginx-docker-compose.yml up -d
+
 up:
-	sudo docker-compose srcs/docker-compose.yml up -d $(c)
+	sudo docker-compose -f srcs/docker-compose.yml up -d $(c)
 
 start:
 	sudo docker-compose -f srcs/docker-compose.yml start $(c)
@@ -23,6 +26,7 @@ restart:
 del:
 	sudo docker rmi nginxb
 	sudo docker rmi wordpressb
+	sudo docker rmi mariadbb
 
 img:
 	sudo docker build -t nginxb srcs/requirements/nginx
