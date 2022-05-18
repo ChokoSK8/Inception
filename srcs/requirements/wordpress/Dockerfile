@@ -13,6 +13,5 @@ COPY	. /home/srcs
 
 EXPOSE	9000 3306
 
-ENTRYPOINT	["bash", "/home/srcs/script.sh"]
-
-CMD	["service",  "php7.3-fpm", "start"]
+#CMD	["./home/srcs/script.sh"]
+CMD	["./usr/sbin/php-fpm7.3", "-F"]

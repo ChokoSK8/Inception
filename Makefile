@@ -4,6 +4,13 @@ build:
 nginx:
 	sudo docker-compose -f srcs/nginx-docker-compose.yml up -d
 
+wordpress:
+	sudo docker-compose -f srcs/wordpress-docker-compose.yml build
+	sudo docker-compose -f srcs/wordpress-docker-compose.yml up -d
+
+mariadb:
+	sudo docker-compose -f srcs/mariadb-docker-compose.yml up -d
+
 up:
 	sudo docker-compose -f srcs/docker-compose.yml up -d $(c)
 

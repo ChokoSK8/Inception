@@ -1,0 +1,12 @@
+version: '3.3'
+services:
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpressb
+    container_name: wordpressc
+    ports:
+      - 9000
+      - 3306
+    env_file:
+      - .env
+    restart: on-failure
