@@ -9,9 +9,10 @@ RUN	apt-get -y update && apt-get -y install wget \
 	php-mysql \
 	libnss3-tools
 
+RUN	mkdir /run/php/ ; touch /run/php/php7.3-fpm.sock
+
 COPY	. /home/srcs
 
 EXPOSE	9000 3306
 
-#CMD	["./home/srcs/script.sh"]
-CMD	["./usr/sbin/php-fpm7.3", "-F"]
+ENTRYPOINT	["sh", "/home/srcs/script.sh"]

@@ -5,14 +5,16 @@ RUN	apt-get -y update ; \
 	openssl ssl-cert \
 	vim
 
+ENV	DOMAIN_NAME abrun.42.fr
+
 RUN	mkdir -p /home/srcs
 
 COPY	. /home/srcs
 
-EXPOSE	443 9000
+RUN	/home/srcs/script.sh
+
+EXPOSE	80 443 9000
 
 STOPSIGNAL	SIGQUIT
 
-ENTRYPOINT	["bash", "/home/srcs/script.sh"]
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD	["nginx", "-g", "daemon off;"]

@@ -23,6 +23,10 @@ down:
 destroy:
 	sudo docker-compose -f srcs/docker-compose.yml down -v $(c)
 
+delVol:
+	rm -rf /home/data/wp-data/abrun.42.fr/*
+	rm -rf /home/data/db-data/abrun.42.fr/*
+
 stop:
 	sudo docker-compose -f srcs/docker-compose.yml stop $(c)
 

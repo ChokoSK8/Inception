@@ -2,21 +2,27 @@ server {
 	listen 443 ssl;
 	listen [::]:443 ssl;
 
-	root	/home/srcs/wp-data/$DOMAIN_NAME;
+	root	/home/wp-data/abrun.42.fr;
 
-	ssl_certificate_key /home/srcs/$DOMAIN_NAME/$DOMAIN_NAME.key;
-	ssl_certificate /home/srcs/$DOMAIN_NAME/$DOMAIN_NAME.crt;
+	ssl_certificate_key /home/srcs/abrun.42.fr.key;
+	ssl_certificate /home/srcs/abrun.42.fr.crt;
 	ssl_protocols TLSv1.2 TLSv1.3;
 
 	index	index.php index.html;
-	server_name	$DOMAIN_NAME www.$DOMAIN_NAME;
+	server_name	abrun.42.fr www.abrun.42.fr;
 
 	location / {
-		try_files $uri $uri/ =404;
+# First attempt to serve request as file, then
+# as directory, then fall back to displaying a 404.
+		try_files $uri $uri/ /index.php?$args;
 	}
-
+# pass the PHP scripts to FastCGI server listening on wordpress:9000
 	location ~ \.php$ {
-		include snippets/fastcgi-php.conf;
-		fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+		fastcgi_split_path_info ^(.+\.php)(/.+)$;
+		fastcgi_pass wordpress:9000;
+		fastcgi_index index.php;
+		include fastcgi_params;
+		fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+		fastcgi_param SCRIPT_NAME $fastcgi_script_name;
 	}
 }

@@ -1,0 +1,22 @@
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+	root	/home/wp-data/abrun.42.fr;
+
+	ssl_certificate_key /home/srcs/abrun.42.fr.key;
+	ssl_certificate /home/srcs/abrun.42.fr.crt;
+	ssl_protocols TLSv1.2 TLSv1.3;
+
+	index	index.php index.html;
+	server_name	abrun.42.fr www.abrun.42.fr;
+
+	location / {
+		try_files  / =404;
+	}
+
+	location ~ \.php$ {
+		include snippets/fastcgi-php.conf;
+		fastcgi_pass unix:/run/php/php7.3-fpm.sock;
+	}
+}

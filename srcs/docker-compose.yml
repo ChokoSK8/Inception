@@ -5,6 +5,7 @@ services:
     image: nginxb
     ports:
       - 443:443
+      - 8080:80
     container_name: nginxc
     env_file:
       - .env
@@ -13,8 +14,11 @@ services:
     depends_on:
       - wordpress
     volumes:
-      - /home/abrun/data/wordpress:/home/srcs/wp-data
+      - /home/abrun/data/wordpress:/home/wp-data
+      - /home/abrun/data/mariadb:/home/db-data
     restart: on-failure
+    links:
+      - wordpress
   wordpress:
     build: ./requirements/wordpress
     image: wordpressb
@@ -26,8 +30,10 @@ services:
     depends_on:
       - mariadb
     volumes:
-      - /home/abrun/data/wordpress:/home/srcs/wp-data
+      - /home/abrun/data/wordpress:/home/wp-data
     restart: on-failure
+    links:
+      - mariadb
   mariadb:
     build: ./requirements/mariadb
     image: mariadbb
@@ -37,7 +43,7 @@ services:
     networks:
       - dnet
     volumes:
-      - /home/abrun/data/mariadb:/home/srcs/db-data
+      - /home/abrun/data/mariadb:/home/db-data
     restart: on-failure
 
 networks:
