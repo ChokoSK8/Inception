@@ -9,5 +9,5 @@ echo "GRANT ALL PRIVILEGES ON *.* TO '$MYSQL_ROOT_USERNAME'@$DOMAIN_NAME IDENTIF
 echo "grant all privileges on $MYSQL_WPDATA_NAME.* TO '$MYSQL_SCND_USERNAME'@'$DOMAIN_NAME' IDENTIFIED BY '$MYSQL_SCND_PASSWORD'";
 echo "flush privileges";
 echo "exit";
-envsubst < /home/srcs/my.cnf > /etc/mysql/my.cnf
-rm -rf /home/srcs/my.cnf
+
+exec "$@"

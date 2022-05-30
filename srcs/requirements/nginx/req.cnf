@@ -11,7 +11,7 @@ C = FR
 ST = IDF
 L = Paris
 O = 42School
-CN = localhost
+CN = abrun.42.fr
  
 [v3_ca]
 subjectKeyIdentifier = hash

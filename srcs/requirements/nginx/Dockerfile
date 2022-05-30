@@ -11,10 +11,10 @@ RUN	mkdir -p /home/srcs
 
 COPY	. /home/srcs
 
-RUN	/home/srcs/script.sh
-
-EXPOSE	80 443 9000
+EXPOSE	443
 
 STOPSIGNAL	SIGQUIT
+
+ENTRYPOINT	["/home/srcs/script.sh"]
 
 CMD	["nginx", "-g", "daemon off;"]
