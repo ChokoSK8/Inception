@@ -1,46 +1,21 @@
-build:
-	sudo docker-compose -f srcs/docker-compose.yml build $(c)
-
-nginx:
-	sudo docker-compose -f srcs/nginx-docker-compose.yml up -d
-
-wordpress:
-	sudo docker-compose -f srcs/wordpress-docker-compose.yml build
-	sudo docker-compose -f srcs/wordpress-docker-compose.yml up -d
-
-mariadb:
-	sudo docker-compose -f srcs/mariadb-docker-compose.yml up -d
-
-up:
-	sudo docker-compose -f srcs/docker-compose.yml up -d $(c)
-
-start:
-	sudo docker-compose -f srcs/docker-compose.yml start $(c)
+all: 
+	mkdir -p /home/abrun/data/wordpress
+	mkdir -p /home/abrun/data/mariadb
+	docker-compose -f ./srcs/docker-compose.yml up
 
 down:
-	sudo docker-compose -f srcs/docker-compose.yml down $(c)
+	docker-compose -f ./srcs/docker-compose.yml down
 
-destroy:
-	sudo docker-compose -f srcs/docker-compose.yml down -v $(c)
+re: clean all
 
-delVol:
-	rm -rf /home/data/wp-data/abrun.42.fr/*
-	rm -rf /home/data/db-data/abrun.42.fr/*
+clean:
+	@-docker stop $$(docker ps -a -q)
+	@-docker rm -f $$(docker ps -a -q)
+	@-docker rmi -f $$(docker images -a -q)
+	@-docker network rm -f $$(docker network ls -q)
+	@-docker volume rm -f $$(docker volume ls -q)
+	@-docker system prune -y
+	@-rm -rf /home/abrun/data/wordpress
+	@-rm -rf /home/abrun/data/mariadb
 
-stop:
-	sudo docker-compose -f srcs/docker-compose.yml stop $(c)
-
-restart:
-	sudo docker-compose -f srcs/docker-compose.yml stop $(c)
-	sudo docker-compose -f srcs/docker-compose.yml up -d $(c)
-
-del:
-	sudo docker rmi nginxb
-	sudo docker rmi wordpressb
-	sudo docker rmi mariadbb
-
-img:
-	sudo docker build -t nginxb srcs/requirements/nginx
-	sudo docker build -t worpressb srcs/requirements/wordpress
-
-.PHONY: help build up start down destroy stop restart logs logs-api ps login-timescale login-api db-shell
+.PHONY: all re down clean

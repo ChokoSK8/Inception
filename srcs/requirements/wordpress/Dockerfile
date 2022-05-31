@@ -1,22 +1,15 @@
-FROM	debian:buster-slim
+FROM debian:buster
 
-RUN	apt-get -y update && apt-get -y install wget \ 
-	php7.3 \
-	php-cli \	
-	php-cgi \
-	php-mbstring \
-	php-fpm \
-	php-mysql \
-	libnss3-tools
+RUN apt-get update
+RUN apt-get -y install php7.3 php-mysqli php-fpm wget sendmail
 
-RUN	mkdir /run/php/ ; touch /run/php/php7.3-fpm.sock
+EXPOSE 9000
 
-COPY	./www.conf /etc/php/7.3/fpm/pool.d
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d
+COPY ./tools /var/www/
 
-COPY	./script.sh /var/www/
+RUN chmod +x /var/www/wordpress_start.sh
 
-COPY	./wp-config.php /var/www
+ENTRYPOINT [ "/var/www/wordpress_start.sh" ]
 
-EXPOSE	9000 3306
-
-ENTRYPOINT	["sh", "/var/www/script.sh"]
+CMD ["/usr/sbin/php-fpm7.3", "--nodaemonize"]

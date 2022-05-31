@@ -1,18 +1,15 @@
-FROM	debian:buster-slim
+FROM debian:buster
 
-RUN	apt-get -y update && apt-get -y install mariadb-server \
-	vim gettext
+RUN apt-get update && apt-get install -y mariadb-server
 
-RUN	mkdir -p /home/srcs ;
+EXPOSE 3306
 
-COPY	./50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+RUN mkdir -p /home/srcs
 
-COPY	. /home/srcs
+COPY ./* /home/srcs/
 
-EXPOSE	3306
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 
-RUN	service mysql start && mysql < /home/srcs/initMysqlDB.sql && rm -rf /home/srcs/initMysqlDB.sql ;
+RUN service mysql start && mysql < /home/srcs/initial_db.sql ;
 
-#ENTRYPOINT	["bash", "/home/srcs/script.sh"]
-
-CMD	["mysqld"]
+CMD ["mysqld"]

@@ -1,49 +1,64 @@
-version: '3.3'
-services:
-  nginx:
-    build: ./requirements/nginx
-    image: nginx
-    ports:
-      - 443:443
-    container_name: nginx
-    env_file:
-      - .env
-    networks:
-      - dnet
-    depends_on:
-      - wordpress
-    volumes:
-      - /home/abrun/data/wordpress:/var/www/html
-    restart: on-failure
-    links:
-      - wordpress
-  wordpress:
-    build: ./requirements/wordpress
-    image: wordpress
-    container_name: wordpress
-    env_file:
-      - .env
-    networks:
-      - dnet
-    depends_on:
-      - mariadb
-    volumes:
-      - /home/abrun/data/wordpress:/var/www/html
-    restart: on-failure
-    links:
-      - mariadb
-  mariadb:
-    build: ./requirements/mariadb
-    image: mariadb
-    container_name: mariadb
-    env_file:
-      - .env
-    networks:
-      - dnet
-    volumes:
-      - /home/abrun/data/mariadb:/var/lib/mysql
-    restart: on-failure
+version: "3.5"
 
 networks:
-  dnet:
-    name: dnet
+  app-network:
+    name: app-network
+    driver: bridge
+
+volumes:
+  wpData:
+    driver: local
+    name: wpData
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/abrun/data/wordpress
+  dbData:
+    driver: local
+    name: dbData
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/abrun/data/mariadb
+
+services:
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    env_file:
+      - .env
+    volumes:
+      - dbData:/var/lib/mysql
+    networks:
+      - app-network
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    env_file:
+      - .env
+    depends_on:
+      - mariadb
+    volumes:
+      - wpData:/var/www/html
+    networks:
+      - app-network
+    restart: always
+    links:
+      - mariadb
+
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    depends_on:
+      - wordpress
+    volumes:
+      - wpData:/var/www/html
+    networks:
+      - app-network
+    restart: always
+    links:
+      - wordpress
