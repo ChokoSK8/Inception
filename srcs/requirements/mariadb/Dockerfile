@@ -8,8 +8,8 @@ RUN mkdir -p /home/srcs
 
 COPY ./* /home/srcs/
 
-COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY ./50-server.cnf /etc/mysql/mariadb.conf.d/
 
-RUN service mysql start && mysql < /home/srcs/initial_db.sql ;
+RUN service mysql start && mysql < /home/srcs/initMysqlDB.sql ;
 
 CMD ["mysqld"]
