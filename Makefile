@@ -3,10 +3,17 @@ all:
 	mkdir -p /home/abrun/data/mariadb
 	docker-compose -f ./srcs/docker-compose.yml up
 
+relauch:
+	docker-compose -f ./srcs/docker-compose.yml up
+
 down:
 	docker-compose -f ./srcs/docker-compose.yml down
 
 re: clean all
+
+delVolume:
+	@-rm -rf /home/abrun/data/wordpress
+	@-rm -rf /home/abrun/data/mariadb
 
 clean:
 	@-docker stop $$(docker ps -a -q)
