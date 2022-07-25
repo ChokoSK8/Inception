@@ -26,8 +26,6 @@ services:
     networks:
       - dnet
     restart: always
-    links:
-      - mariadb
 
   nginx:
     container_name: nginx
@@ -42,8 +40,6 @@ services:
     networks:
       - dnet
     restart: always
-    links:
-      - wordpress
 
 networks:
   dnet:
